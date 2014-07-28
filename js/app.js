@@ -46,4 +46,29 @@ resources.load([
     'img/terrain.png'
 ]);
 resources.onReady(init);
-/////////////////////////
+//Game state
+
+var player = {
+    pos: [0, 0],
+    sprite: new Sprite('img/sprites.png',[0, 0], [39, 39], 16, [0, 1])
+};
+
+var bullets = [];
+var enemies = [];
+var explosions = [];
+
+
+var lastFire = Date.now();
+var gameTime = 0;
+var isGameOver;
+var terrainPattern;
+
+var score = 0;
+var scoreEl = document.getElementById('score');
+
+//Game over
+
+function gameOver() {
+    document.getElementById("game-over").style.display = 'block';
+    document.getElementById('game-over-overplay').style.display = 'block';
+}
