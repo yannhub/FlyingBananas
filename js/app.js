@@ -46,6 +46,7 @@ resources.load([
     'img/terrain.png'
 ]);
 resources.onReady(init);
+
 //Game state
 
 var player = {
@@ -66,7 +67,8 @@ var terrainPattern;
 var score = 0;
 var scoreEl = document.getElementById('score');
 
-//Speed in pps
+//Speed for player, bullets and enemys in pps
+
 var playerSpeed = 200;
 var bulletSpeed = 500;
 var enemySpeed = 100;
@@ -142,6 +144,7 @@ function handleInput(dt)
 function updateEntities(dt)
 {
     // Update the player sprite animation
+
     player.sprite.update(dt);
 
     for (var i = 0; i < bullets.length; i++)
@@ -163,6 +166,7 @@ function updateEntities(dt)
     }
 
     // Update all the enemies
+
     for (var i = 0; i < enemies.length; i++)
     {
         enemies[i].pos[0] -= enemySpeed * dt;
@@ -175,6 +179,7 @@ function updateEntities(dt)
     }
 
     // Update all the explosions
+
     for (var i = 0; i < explosions.length; i++)
     {
         explosions[i].sprite.update(dt);
@@ -186,16 +191,135 @@ function updateEntities(dt)
     }
 }
 
-//Tomorrow 29.07 i will finish update parts
+//Collisions
 
-//Game over
+function collides(x, y, r, b, x2, y2, r2, b2)
+{
+    return !(r <= x2 || x > r2 || b <= y2 || y > b2);
+}
+
+function boxCollides(pos, size, pos2, size2) {
+    return collides(pos[0], pos[1], pos[0] + size[0], pos[1] + size[1], pos2[0], pos2[1], pos2[0] + size2[0], pos2[1] + size2[1]);
+}
+
+
+
+function checkCollisions()
+{
+    checkPlayerBounds();
+
+    // Run collision detection for all enemies and bullets
+
+    for (var i = 0; i < enemies.length; i++)
+    {
+        var pos = enemies[i].pos;
+        var size = enemies[i].sprite.size;
+
+        for (var j = 0; j < bullets.length; j++)
+        {
+            var pos2 = bullets[j].pos;
+            var size2 = bullets[j].sprite.size;
+
+            if (boxCollides(pos, size, pos2, size2))
+            {
+
+                // Remove the enemy
+
+                enemies.splice(i, 1);
+                i--;
+
+                // Add score
+
+                score += 100;
+
+                // Add an explosion
+
+                explosions.push({
+                    pos: pos,
+                    sprite: new Sprite('img/sprites.png',
+                        [0, 117], [39, 39],
+                        16, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+                        null, true)
+                });
+
+                // Remove the bullet and stop this iteration
+
+                bullets.splice(j, 1);
+                break;
+            }
+        }
+
+        if (boxCollides(pos, size, player.pos, player.sprite.size)) {
+            gameOver();
+        }
+    }
+}
+
+//check bounds
+
+function checkPlayerBounds()
+{
+    if (player.pos[0] < 0)
+    {
+        player.pos[0] = 0;
+    }
+    else if (player.pos[0] > canvas.width - player.sprite.size[0])
+    {
+        player.pos[0] = canvas.width - player.sprite.size[0];
+    }
+
+    if (player.pos[1] < 0) {
+        player.pos[1] = 0;
+    }
+    else if (player.pos[1] > canvas.height - player.sprite.size[1])
+    {
+        player.pos[1] = canvas.height - player.sprite.size[1];
+    }
+}
+
+//Time to Draw some shits
+
+function render()
+{
+    ctx.fillStyle = terrainPattern;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+// Draw player if the game isn't over
+
+    if (!isGameOver)
+    {
+        renderEntity(player);
+    }
+
+    renderEntities(bullets);
+    renderEntities(enemies);
+    renderEntities(explosions);
+};
+
+function renderEntities(list)
+{
+    for (var i = 0; i < list.length; i++)
+    {
+        renderEntity(list[i]);
+    }
+}
+
+function renderEntity(entity)
+{
+    ctx.save();
+    ctx.translate(entity.pos[0], entity.pos[1]);
+    entity.sprite.render(ctx);
+    ctx.restore();
+}
+
+//game over
 
 function gameOver() {
     document.getElementById("game-over").style.display = 'block';
     document.getElementById('game-over-overplay').style.display = 'block';
 }
 
-//Reset game to original state
+//reset game to original state
 function reset()
 {
     document.getElementById('game-over').style.display = 'none';
