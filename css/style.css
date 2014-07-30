@@ -28,7 +28,7 @@ canvas {
 
 #score {
     float: right;
-    color: white;
+    color: #000;
     font-size: 2em;
 }
 
