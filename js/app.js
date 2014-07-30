@@ -199,7 +199,10 @@ function collides(x, y, r, b, x2, y2, r2, b2)
 }
 
 function boxCollides(pos, size, pos2, size2) {
-    return collides(pos[0], pos[1], pos[0] + size[0], pos[1] + size[1], pos2[0], pos2[1], pos2[0] + size2[0], pos2[1] + size2[1]);
+    return collides(pos[0], pos[1], 
+                    pos[0] + size[0], pos[1] + size[1], 
+                    pos2[0], pos2[1], 
+                    pos2[0] + size2[0], pos2[1] + size2[1]);
 }
 
 
@@ -316,7 +319,8 @@ function renderEntity(entity)
 
 function gameOver() {
     document.getElementById("game-over").style.display = 'block';
-    document.getElementById('game-over-overplay').style.display = 'block';
+    document.getElementById('game-over-overlay').style.display = 'block';
+    isGameOver = true;
 }
 
 //reset game to original state
