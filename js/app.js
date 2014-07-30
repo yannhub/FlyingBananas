@@ -90,7 +90,7 @@ function update(dt)
                                6, [0, 1, 2, 3, 2, 1])
         });
     }
-    checkCollision();
+    checkCollisions();
     scoreEl.innerHTML = score;
 };
 
