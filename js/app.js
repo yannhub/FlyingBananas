@@ -30,7 +30,7 @@ function main() {
 };
 
 function init() {
-    terrainPattern = ctx.createPattern(resources.get('img/terrain.png'), 'repeat');
+    terrainPattern = ctx.createPattern(resources.get('img/bgnd.png'), 'repeat');
 
     document.getElementById('play-again').addEventListener('click', function () {
         reset();
@@ -43,7 +43,7 @@ function init() {
 
 resources.load([
     'img/sprites1.png',
-    'img/terrain.png'
+    'img/bgnd.png'
 ]);
 resources.onReady(init);
 
@@ -86,8 +86,8 @@ function update(dt)
         enemies.push({
             pos: [canvas.width,
                   Math.random() * (canvas.height - 39)],
-            sprite: new Sprite('img/sprites1.png', [0, 78], [80, 39],
-                               6, [0, 1, 2, 3, 2, 1])
+            sprite: new Sprite('img/sprites1.png', [0, 65], [85, 50],
+                               6, [0, 1, 2, 1, 0])
         });
     }
     checkCollisions();
