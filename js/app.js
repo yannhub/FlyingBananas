@@ -30,7 +30,7 @@ function main() {
 };
 
 function init() {
-    terrainPattern = ctx.createPattern(resources.get('img/bgnd.png'), 'repeat');
+    terrainPattern = ctx.createPattern(resources.get('img/jungle.jpg'), 'repeat');
 
     document.getElementById('play-again').addEventListener('click', function () {
         reset();
@@ -43,7 +43,7 @@ function init() {
 
 resources.load([
     'img/sprites1.png',
-    'img/bgnd.png'
+    'img/jungle.jpg'
 ]);
 resources.onReady(init);
 
