@@ -86,7 +86,7 @@ function update(dt)
         enemies.push({
             pos: [canvas.width,
                   Math.random() * (canvas.height - 39)],
-            sprite: new Sprite('img/sprites1.png', [0, 65], [85, 52],
+            sprite: new Sprite('img/sprites1.png', [0, 65], [85, 50],
                                6, [0, 1, 2, 1, 0])
         });
     }
