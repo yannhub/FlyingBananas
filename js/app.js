@@ -30,7 +30,7 @@ function main() {
 };
 
 function init() {
-    terrainPattern = ctx.createPattern(resources.get('img/jungle.jpg'), 'repeat');
+    terrainPattern = ctx.createPattern(resources.get('img/jungle.jpg'), 'no-repeat');
 
     document.getElementById('play-again').addEventListener('click', function () {
         reset();
@@ -86,7 +86,7 @@ function update(dt)
         enemies.push({
             pos: [canvas.width,
                   Math.random() * (canvas.height - 39)],
-            sprite: new Sprite('img/sprites1.png', [0, 65], [85, 50],
+            sprite: new Sprite('img/sprites1.png', [0, 65], [85, 52],
                                6, [0, 1, 2, 1, 0])
         });
     }
