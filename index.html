@@ -1,151 +1,29 @@
-<!DOCTYPE HTML>
-<!--
-	Overflow 1.1 by HTML5 UP
-	html5up.net | @n33co
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
--->
+<!DOCTYPE html>
 <html>
-	<head>
-		<title>Team Anemone Galilee</title>
-		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-		<meta name="description" content="" />
-		<meta name="keywords" content="" />
-		<link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,300italic" rel="stylesheet" type="text/css" />
-		<!--[if lte IE 8]><script src="css/ie/html5shiv.js"></script><![endif]-->
-		<script src="js/jquery.min.js"></script>
-		<script src="js/jquery.poptrox.min.js"></script>
-		<script src="js/skel.min.js"></script>
-		<script src="js/init.js"></script>
-		<noscript>
-			<link rel="stylesheet" href="css/skel-noscript.css" />
-            <link rel="stylesheet" href="css/style-site.css" />
-		</noscript>
-		<!--[if lte IE 8]><link rel="stylesheet" href="css/ie/v8.css" /><![endif]-->
-        <link rel="stylesheet" href="css/style-site.css" />
-	</head>
-	<body>
-
-		<!-- Header -->
-		<section id="header">
-			<header>
-				<h1>Banana shooter</h1>
-				<p>By Anemone Galilee Теам</p>
-			</header>
-			<footer>
-				<a href="#first-member" class="button style2 scrolly scrolly-centered">Discover our team and game</a>
-			</footer>
-		</section>
-	
-	<!-- Feature 1 -->
-		<article id="first-member" class="container box style1 right">
-			<a href="" class="image full"><img src="images/bankin.png" alt="" /></a>
-			<div class="inner">
-				<header>
-					<h2>Nikolay Bankin</h2>
-				</header>
-				<p>
-                    <strong>Main responsibilities:</strong>
-                    <p>Talk a lot and !(work a lot), Idias, Consultuing, HTML &amp; CSSS, Front-End</p> 
-                </p>
-			</div>
-		</article>
-	
-	<!-- Feature 2 -->
-		<article id="second-member" class="container box style1 right">
-            <a href="" class="image full"><img  src="images/plamen.png" alt="" /></a>
-            <div class="inner">
-                <header>
-                    <h2>Plamen Minkov</h2>
-                </header>
-                <p>
-                    <strong>Main responsibilities:</strong>
-                    <p>Canvas, Game Loop, Loading different resources</p> 
-                </p>
-            </div>
-        </article>
-
-        <article id="fourth-member" class="container box style1 right">
-            <a href="" class="image full"><img src="images/shukriev.png" alt="" /></a>
-            <div class="inner">
-                <header>
-                    <h2>Shukri Shikriev</h2>
-                </header>
-                <p>
-                    <strong>Main responsibilities:</strong>
-                    <p>Game States, Updating Scenes, Rendering, Game Over</p> 
-                </p>
-            </div>
-        </article>
-
-        <article id="third-member" class="container box style1 right">
-            <a href="" class="image full"><img src="images/mina.png" alt="" /></a>
-            <div class="inner">
-                <header>
-                    <h2>Mina Dodunekova</h2>
-                </header>
-                <p>
-                    <strong>Main responsibilities:</strong>
-                    <p>Creating/Editting resources &amp; sprites, Game CSS work, Team presentation</p> 
-                </p>
-            </div>
-        </article>
-
-        <!-- Banner -->
-        <section id="banner">
-            <header>
-                <h2 style="letter-spacing: 6px;">Press the button to see the game</h2>
-            </header>
-            <!-- The game is played here -->
-            
-
-            <footer>
-                <a href="game.html" class="button style2 scrolly">See the game</a>
-            </footer>
-        </section>
-	
-		<!-- Contact -->
-		<article class="container box style3">
-			<header>
-				<h2>Contact Us</h2>
-				<p>Fill the form bellow to contact us.</p>
-			</header>
-			<form>
-				<div class="row half">
-					<div class="6u"><input type="text" class="text" name="name" placeholder="Name" /></div>
-					<div class="6u"><input type="text" class="text" name="email" placeholder="Email" /></div>
-				</div>
-				<div class="row half">
-					<div class="12u">
-						<textarea name="message" placeholder="Message"></textarea>
-					</div>
-				</div>
-				<div class="row">
-					<div class="12u">
-						<ul class="actions">
-							<li><a href="#" class="button form">Send Message</a></li>
-						</ul>
-					</div>
-				</div>
-			</form>
-		</article>
-
-		<section id="footer">
-			<ul class="icons">
-				<li><a href="#" class="fa fa-twitter solo"><span>Twitter</span></a></li>
-				<li><a href="#" class="fa fa-facebook solo"><span>Facebook</span></a></li>
-				<li><a href="#" class="fa fa-google-plus solo"><span>Google+</span></a></li>
-				<li><a href="#" class="fa fa-pinterest solo"><span>Pinterest</span></a></li>
-				<li><a href="#" class="fa fa-dribbble solo"><span>Dribbble</span></a></li>
-				<li><a href="#" class="fa fa-linkedin solo"><span>LinkedIn</span></a></li>
-			</ul>
-			<div class="copyright">
-				<ul class="menu">
-					<li>&copy; All rights reserved.</li>
-					<li>Design: <a href="http://html5up.net/">HTML5 UP</a></li>
-				</ul>
-			</div>
-		</section>
-
-
-	</body>
+  <head>
+    <title>FlyingBananas Mobile Game</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, user-scalable=no"
+    />
+  </head>
+  <body>
+    <div id="game-over-overlay"></div>
+    <div id="game-over">
+      <h1>GAME OVER</h1>
+      <button id="play-again">Play Again</button>
+    </div>
+    <div class="wrapper">
+      <div id="instructions">Score</div>
+      <div id="score"></div>
+      <div class="clear"></div>
+    </div>
+    <div id="shoot-button">B</div>
+    <script type="text/javascript" src="js/resources.js"></script>
+    <script type="text/javascript" src="js/joystick.js"></script>
+    <script type="text/javascript" src="js/input.js"></script>
+    <script type="text/javascript" src="js/sprite.js"></script>
+    <script type="text/javascript" src="js/app.js"></script>
+  </body>
 </html>
