@@ -46,7 +46,7 @@ if (isMobileDevice) {
 }
 
 // Bootstrap game
-resources.load(["img/sprites1.png", "img/jungle.jpg"]);
+resources.load(["img/sprites1.png", "img/jungle.jpg", "img/oc-bonus.png"]);
 resources.onReady(init);
 
 // Manage Orientation
@@ -132,6 +132,7 @@ var player = {
 var bullets = [];
 var enemies = [];
 var explosions = [];
+var bonus = [];
 
 var lastFire = Date.now();
 var gameTime = 0;
@@ -146,6 +147,7 @@ var scoreEl = document.getElementById("score");
 var playerSpeed = 200;
 var bulletSpeed = 500;
 var enemySpeed = 100;
+var bulletCadence = 120;
 
 // Update Game Objects
 
@@ -153,6 +155,18 @@ function update(dt) {
   gameTime += dt;
   handleInput(dt);
   updateEntities(dt);
+
+  if (
+    bonus.length === 0 &&
+    score !== 0 &&
+    score % 1000 === 0 &&
+    Math.random() < 0.1
+  ) {
+    bonus.push({
+      pos: [canvas.width, Math.random() * (canvas.height - 39)],
+      sprite: new Sprite("img/oc-bonus.png", [0, 0], [50, 50], 6, [0]),
+    });
+  }
 
   if (Math.random() < 1 - Math.pow(0.993, gameTime)) {
     enemies.push({
@@ -190,7 +204,11 @@ function handleInput(dt) {
     player.pos[0] += playerSpeed * dt;
   }
 
-  if (input.isDown("SPACE") && !isGameOver && Date.now() - lastFire > 100) {
+  if (
+    input.isDown("SPACE") &&
+    !isGameOver &&
+    Date.now() - lastFire > bulletCadence
+  ) {
     var x = player.pos[0] + player.sprite.size[0] / 2;
     var y = player.pos[1] + player.sprite.size[1] / 2;
 
@@ -253,6 +271,17 @@ function updateEntities(dt) {
     }
   }
 
+  // Update all the bonus
+
+  for (var i = 0; i < bonus.length; i++) {
+    bonus[i].pos[0] -= enemySpeed * dt;
+    bonus[i].sprite.update(dt);
+    if (bonus[i].pos[0] + bonus[i].sprite.size[0] < 0) {
+      bonus.splice(i, 1);
+      i--;
+    }
+  }
+
   // Update all the explosions
 
   for (var i = 0; i < explosions.length; i++) {
@@ -286,7 +315,7 @@ function boxCollides(pos, size, pos2, size2) {
 function checkCollisions() {
   checkPlayerBounds();
 
-  // Run collision detection for all enemies and bullets
+  // Run collision detection for all enemies, bullets
 
   for (var i = 0; i < enemies.length; i++) {
     var pos = enemies[i].pos;
@@ -332,6 +361,20 @@ function checkCollisions() {
       gameOver();
     }
   }
+
+  // Run collision detection for bonus
+  for (var i = 0; i < bonus.length; i++) {
+    var pos = bonus[i].pos;
+    var size = bonus[i].sprite.size;
+
+    if (boxCollides(pos, size, player.pos, player.sprite.size)) {
+      bulletCadence = Math.max(10, bulletCadence - 2);
+      bulletSpeed = bulletSpeed * 1.01;
+      enemySpeed = enemySpeed * 0.95;
+      enemies.splice(0, enemies.length - Math.round(enemies.length / 4));
+      bonus = [];
+    }
+  }
 }
 
 //check bounds
@@ -364,6 +407,7 @@ function render() {
 
   renderEntities(bullets);
   renderEntities(enemies);
+  renderEntities(bonus);
   renderEntities(explosions);
 }
 
@@ -400,6 +444,7 @@ function reset() {
 
   enemies = [];
   bullets = [];
+  bonus = [];
 
   player.pos = [50, canvas.height / 2];
 }
