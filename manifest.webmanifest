@@ -2,7 +2,7 @@
   "name": "FlyingBananas Game",
   "short_name": "FB Game",
   "start_url": "./?utm_source=web_app_manifest",
-  "display": "standalone",
+  "display": "fullscreen",
   "icons": [
     {
       "src": "img/logo.png",
