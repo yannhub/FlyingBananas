@@ -135,19 +135,13 @@ var explosions = [];
 var bonus = [];
 
 var lastFire = Date.now();
-var gameTime = 0;
+var gameTime;
 var isGameOver;
 var terrainPattern;
-
-var score = 0;
+var playerSpeed, bulletSpeed, enemySpeed, bulletCadence;
+var score;
+var oldScore;
 var scoreEl = document.getElementById("score");
-
-//Speed for player, bullets and enemys in pps
-
-var playerSpeed = 200;
-var bulletSpeed = 500;
-var enemySpeed = 100;
-var bulletCadence = 200;
 
 // Update Game Objects
 
@@ -157,11 +151,12 @@ function update(dt) {
   updateEntities(dt);
 
   if (
-    bonus.length === 0 &&
+    oldScore !== score &&
     score !== 0 &&
     score % 500 === 0 &&
-    Math.random() < 0.1
+    Math.random() < 0.025
   ) {
+    oldScore = score;
     bonus.push({
       pos: [canvas.width, Math.random() * (canvas.height - 39)],
       sprite: new Sprite("img/oc-bonus.png", [0, 0], [50, 50], 6, [0]),
@@ -391,7 +386,7 @@ function checkCollisions() {
       enemies.splice(i, enemiesToKill);
       score += 100 * enemiesToKill;
 
-      bonus = [];
+      bonus.splice(i, 1);
     }
   }
 }
@@ -459,7 +454,14 @@ function reset() {
   isGameOver = false;
 
   gameTime = 0;
+  oldScore = -1;
   score = 0;
+
+  //Speed for player, bullets and enemys in pps
+  playerSpeed = 200;
+  bulletSpeed = 500;
+  enemySpeed = 100;
+  bulletCadence = 180;
 
   enemies = [];
   bullets = [];
