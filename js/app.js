@@ -182,21 +182,26 @@ function update(dt) {
 function handleInput(dt) {
   if (isMobileDevice) {
     input.setKeyFromJoystick(joystick);
-  }
-  if (input.isDown("DOWN") || input.isDown("s")) {
-    player.pos[1] += playerSpeed * dt;
-  }
-
-  if (input.isDown("UP") || input.isDown("w")) {
-    player.pos[1] -= playerSpeed * dt;
-  }
-
-  if (input.isDown("LEFT") || input.isDown("a")) {
-    player.pos[0] -= playerSpeed * dt;
-  }
-
-  if (input.isDown("RIGHT") || input.isDown("d")) {
-    player.pos[0] += playerSpeed * dt;
+    const maxRadius = 30;
+    const dx = Math.max(Math.min(joystick.dx, maxRadius), -maxRadius);
+    const dy = Math.max(Math.min(joystick.dy, maxRadius), -maxRadius);
+    const sx = dx / maxRadius;
+    const sy = dy / maxRadius;
+    player.pos[0] += sx * (playerSpeed * (2 - Math.abs(sy))) * dt;
+    player.pos[1] += sy * (playerSpeed * (2 - Math.abs(sx))) * dt;
+  } else {
+    if (input.isDown("DOWN") || input.isDown("s")) {
+      player.pos[1] += playerSpeed * dt;
+    }
+    if (input.isDown("UP") || input.isDown("w")) {
+      player.pos[1] -= playerSpeed * dt;
+    }
+    if (input.isDown("LEFT") || input.isDown("a")) {
+      player.pos[0] -= playerSpeed * dt;
+    }
+    if (input.isDown("RIGHT") || input.isDown("d")) {
+      player.pos[0] += playerSpeed * dt;
+    }
   }
 
   if (

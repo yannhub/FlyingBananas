@@ -152,6 +152,8 @@ JoyStick.prototype.__create_fullscreen_div = function () {
     }
   }
   function clear_flags() {
+    self.dx = 0;
+    self.dy = 0;
     self.left = false;
     self.right = false;
     self.up = false;
