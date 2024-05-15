@@ -159,7 +159,7 @@ function update(dt) {
   if (
     bonus.length === 0 &&
     score !== 0 &&
-    score % 1000 === 0 &&
+    score % 500 === 0 &&
     Math.random() < 0.1
   ) {
     bonus.push({
@@ -368,8 +368,29 @@ function checkCollisions() {
     var size = bonus[i].sprite.size;
 
     if (boxCollides(pos, size, player.pos, player.sprite.size)) {
-      bulletCadence = Math.max(10, bulletCadence - 1);
-      enemies.splice(0, enemies.length - Math.round(enemies.length / 3));
+      bulletCadence = Math.max(10, bulletCadence - 5);
+
+      const enemiesToKill = enemies.length - Math.round(enemies.length / 3);
+      for (let j = 0; j < enemiesToKill; j++) {
+        let posE = enemies[j].pos;
+
+        // Add an explosion
+        explosions.push({
+          pos: posE,
+          sprite: new Sprite(
+            "img/sprites1.png",
+            [0, 117],
+            [39, 39],
+            16,
+            [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+            null,
+            true
+          ),
+        });
+      }
+      enemies.splice(i, enemiesToKill);
+      score += 100 * enemiesToKill;
+
       bonus = [];
     }
   }
