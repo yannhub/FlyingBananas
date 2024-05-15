@@ -1,20 +1,19 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
   <head>
     <title>FlyingBananas Mobile Game</title>
+    <link rel="manifest" href="/manifest.webmanifest" />
     <link rel="stylesheet" href="css/style.css" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, user-scalable=no"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
   </head>
   <body>
+    <p id="portrait-alert">Tournez votre téléphone pour démarrer le jeu</p>
     <div id="game-over-overlay"></div>
     <div id="game-over">
       <h1>GAME OVER</h1>
       <button id="play-again">Play Again</button>
     </div>
-    <div class="wrapper">
+    <div id="score-wrapper">
       <div id="instructions">Score</div>
       <div id="score"></div>
       <div class="clear"></div>

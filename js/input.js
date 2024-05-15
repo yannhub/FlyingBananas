@@ -45,13 +45,13 @@
       return pressedKeys[key.toUpperCase()];
     },
     setKeyFromJoystick: function (joystick) {
-      pressedKeys = {
-        SPACE: true,
-        UP: joystick.up,
-        DOWN: joystick.down,
-        LEFT: joystick.left,
-        RIGHT: joystick.right,
-      };
+      pressedKeys.UP = joystick.up;
+      pressedKeys.DOWN = joystick.down;
+      pressedKeys.LEFT = joystick.left;
+      pressedKeys.RIGHT = joystick.right;
+    },
+    setSpaceKey: function (pressed) {
+      pressedKeys.SPACE = pressed;
     },
   };
 })();

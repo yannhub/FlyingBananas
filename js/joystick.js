@@ -4,7 +4,12 @@
 var JOYSTICK_DIV = null;
 
 function __init_joystick_div() {
+  const oldJoy = document.getElementById("my-joystick");
+  if (oldJoy) {
+    oldJoy.remove();
+  }
   JOYSTICK_DIV = document.createElement("div");
+  JOYSTICK_DIV.id = "my-joystick";
   var div_style = JOYSTICK_DIV.style;
   div_style.background = "rgba(255,255,255,0)";
   div_style.position = "absolute";
@@ -83,9 +88,7 @@ JoyStick.prototype.__is_right = function (dx, dy) {
 };
 
 JoyStick.prototype.__create_fullscreen_div = function () {
-  if (JOYSTICK_DIV === null) {
-    __init_joystick_div();
-  }
+  __init_joystick_div();
   this.div = JOYSTICK_DIV;
   ///////////////////////////////////////////
   this.base = document.createElement("span");
@@ -164,9 +167,7 @@ var JoyStickButton = function (attrs) {
   this.x = attrs.x || 0;
   this.y = attrs.y || 0;
   this.text = attrs.text || "";
-  if (JOYSTICK_DIV === null) {
-    __init_joystick_div();
-  }
+  __init_joystick_div();
   this.base = document.createElement("span");
   this.base.innerHTML = this.text;
   div_style = this.base.style;

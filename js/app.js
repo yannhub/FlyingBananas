@@ -24,55 +24,103 @@ const isMobileDevice = toMatch.some((toMatchItem) =>
   navigator.userAgent.match(toMatchItem)
 );
 
-// Initialization for mobile devices
-var joystick;
+// Glob vars
+let joystick, canvas, ctx, lastTime;
+let idle = true;
+
+// Get glob elements
+const portraitAlert = document.getElementById("portrait-alert");
+const shootButton = document.getElementById("shoot-button");
+const scoreWrapper = document.getElementById("score-wrapper");
+const playAgainBtn = document.getElementById("play-again");
+
+// Add glob events
+playAgainBtn.addEventListener("click", reset);
 if (isMobileDevice) {
-  // creates a centralized joystick
-  joystick = new JoyStick({
-    radius: 40,
-    x: 80,
-    y: window.innerHeight - 80,
-    inner_radius: 30,
+  shootButton.addEventListener("touchstart", () => {
+    input.setSpaceKey(true);
+  });
+  shootButton.addEventListener("touchend", () => {
+    input.setSpaceKey(false);
   });
 }
 
-// Create the canvas
-var canvas = document.createElement("canvas");
-var ctx = canvas.getContext("2d");
-canvas.width = 512;
-canvas.height = window.innerHeight;
-document.body.appendChild(canvas);
+// Bootstrap game
+resources.load(["img/sprites1.png", "img/jungle.jpg"]);
+resources.onReady(init);
+
+// Manage Orientation
+var isLandscape = window.matchMedia("(orientation: landscape)").matches;
+if (isMobileDevice) {
+  window.addEventListener(
+    "orientationchange",
+    () => {
+      setTimeout(() => {
+        isLandscape = window.matchMedia("(orientation: landscape)").matches;
+        init();
+      });
+    },
+    false
+  );
+}
 
 //Main game loop
-var lastTime;
 function main() {
-  var now = Date.now();
-  var dt = (now - lastTime) / 1000.0;
+  if (!idle) {
+    var now = Date.now();
+    var dt = (now - lastTime) / 1000.0;
 
-  update(dt);
-  render();
+    update(dt);
+    render();
 
-  lastTime = now;
-  requestAnimFrame(main);
+    lastTime = now;
+    requestAnimFrame(main);
+  }
 }
 
 function init() {
+  if (isMobileDevice && !isLandscape) {
+    idle = true;
+    portraitAlert.style.visibility = "visible";
+    shootButton.style.visibility = "hidden";
+    scoreWrapper.style.visibility = "hidden";
+    document.getElementById("my-joystick")?.remove();
+    canvas?.remove();
+    return;
+  }
+  idle = false;
+  portraitAlert.style.visibility = "hidden";
+  shootButton.style.visibility = "visible";
+  scoreWrapper.style.visibility = "visible";
+
+  // Initialization for mobile devices
+  if (isMobileDevice) {
+    // creates a centralized joystick
+    joystick = new JoyStick({
+      radius: 40,
+      x: 80,
+      y: window.innerHeight - 80,
+      inner_radius: 30,
+    });
+  }
+
+  // Create the canvas
+  canvas = document.createElement("canvas");
+  canvas.id = "game-canvas";
+  ctx = canvas.getContext("2d");
+  canvas.width = 512;
+  canvas.height = Math.min(window.innerHeight, 480);
+  document.body.appendChild(canvas);
+
   terrainPattern = ctx.createPattern(
     resources.get("img/jungle.jpg"),
     "no-repeat"
   );
 
-  document.getElementById("play-again").addEventListener("click", function () {
-    reset();
-  });
-
   reset();
   lastTime = Date.now();
   main();
 }
-
-resources.load(["img/sprites1.png", "img/jungle.jpg"]);
-resources.onReady(init);
 
 //Game state
 
@@ -124,7 +172,6 @@ function update(dt) {
 
 function handleInput(dt) {
   if (isMobileDevice) {
-    console.log(joystick.up);
     input.setKeyFromJoystick(joystick);
   }
   if (input.isDown("DOWN") || input.isDown("s")) {
@@ -336,7 +383,7 @@ function renderEntity(entity) {
 //game over
 
 function gameOver() {
-  document.getElementById("game-over").style.display = "block";
+  document.getElementById("game-over").style.display = "flex";
   document.getElementById("game-over-overlay").style.display = "block";
   isGameOver = true;
 }
