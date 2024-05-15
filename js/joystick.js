@@ -123,20 +123,33 @@ JoyStick.prototype.__create_fullscreen_div = function () {
   // to captures fast movements
   function touch_hander(evt) {
     evt.preventDefault();
-    var touch_obj = evt.changedTouches ? evt.changedTouches[0] : evt;
+    var touch_obj;
 
-    self.control.style.left = touch_obj.clientX - self.inner_radius + "px";
-    self.control.style.top = touch_obj.clientY - self.inner_radius + "px";
+    // If multiple touches, take only touch from the left side
+    if (evt.changedTouches) {
+      for (i = 0; i < evt.changedTouches.length; i++) {
+        const t = evt.changedTouches.item(i);
+        if (t.clientX < window.innerWidth / 2) {
+          touch_obj = t;
+          break;
+        }
+      }
+    }
 
-    var dx = touch_obj.clientX - self.x;
-    var dy = touch_obj.clientY - self.y;
+    if (touch_obj) {
+      self.control.style.left = touch_obj.clientX - self.inner_radius + "px";
+      self.control.style.top = touch_obj.clientY - self.inner_radius + "px";
 
-    self.dx = dx;
-    self.dy = dy;
-    self.up = self.__is_up(dx, dy);
-    self.down = self.__is_down(dx, dy);
-    self.left = self.__is_left(dx, dy);
-    self.right = self.__is_right(dx, dy);
+      var dx = touch_obj.clientX - self.x;
+      var dy = touch_obj.clientY - self.y;
+
+      self.dx = dx;
+      self.dy = dy;
+      self.up = self.__is_up(dx, dy);
+      self.down = self.__is_down(dx, dy);
+      self.left = self.__is_left(dx, dy);
+      self.right = self.__is_right(dx, dy);
+    }
   }
   function clear_flags() {
     self.left = false;
