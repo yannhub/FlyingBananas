@@ -3,10 +3,12 @@
   "short_name": "FB Game",
   "start_url": "./?utm_source=web_app_manifest&fullscreen=true",
   "display": "fullscreen",
+  "theme_color": "#ffe200",
+  "background_color": "#183026",
   "icons": [
     {
       "src": "./img/logo.png",
-      "sizes": "96x96",
+      "sizes": "144x144",
       "type": "image/png"
     }
   ],
