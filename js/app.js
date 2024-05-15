@@ -147,7 +147,7 @@ var scoreEl = document.getElementById("score");
 var playerSpeed = 200;
 var bulletSpeed = 500;
 var enemySpeed = 100;
-var bulletCadence = 120;
+var bulletCadence = 200;
 
 // Update Game Objects
 
