@@ -368,10 +368,8 @@ function checkCollisions() {
     var size = bonus[i].sprite.size;
 
     if (boxCollides(pos, size, player.pos, player.sprite.size)) {
-      bulletCadence = Math.max(10, bulletCadence - 2);
-      bulletSpeed = bulletSpeed * 1.01;
-      enemySpeed = enemySpeed * 0.95;
-      enemies.splice(0, enemies.length - Math.round(enemies.length / 4));
+      bulletCadence = Math.max(10, bulletCadence - 1);
+      enemies.splice(0, enemies.length - Math.round(enemies.length / 3));
       bonus = [];
     }
   }
