@@ -53,6 +53,7 @@ canvas {
 }
 
 #score-wrapper {
+  visibility: hidden;
   position: absolute;
   top: 0;
   width: 100%;
@@ -78,6 +79,7 @@ canvas {
 }
 
 #shoot-button {
+  visibility: hidden;
   user-select: none;
   position: absolute;
   text-align: center;
