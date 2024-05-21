@@ -71,10 +71,10 @@ window.addEventListener("load", () => {
 
   if (isMobileDevice) {
     domElements.shootButton.addEventListener("touchstart", () =>
-      input.setSpaceKey(true)
+      input.setShoot(true)
     );
     domElements.shootButton.addEventListener("touchend", () =>
-      input.setSpaceKey(false)
+      input.setShoot(false)
     );
     window.addEventListener(
       "orientationchange",
@@ -224,7 +224,6 @@ window.addEventListener("load", () => {
 
   // Handle mobile input
   function handleMobileInput(dt) {
-    input.setKeyFromJoystick(joystick);
     const maxRadius = 30;
     const dx = Math.max(Math.min(joystick.dx, maxRadius), -maxRadius);
     const dy = Math.max(Math.min(joystick.dy, maxRadius), -maxRadius);
@@ -238,20 +237,20 @@ window.addEventListener("load", () => {
 
   // Handle keyboard input
   function handleKeyboardInput(dt) {
-    if (input.isDown("DOWN") || input.isDown("s"))
+    if (input.isActionActive("MOVE_DOWN"))
       game.entities.player.pos[1] += game.state.playerSpeed * dt;
-    if (input.isDown("UP") || input.isDown("w"))
+    if (input.isActionActive("MOVE_UP"))
       game.entities.player.pos[1] -= game.state.playerSpeed * dt;
-    if (input.isDown("LEFT") || input.isDown("a"))
+    if (input.isActionActive("MOVE_LEFT"))
       game.entities.player.pos[0] -= game.state.playerSpeed * dt;
-    if (input.isDown("RIGHT") || input.isDown("d"))
+    if (input.isActionActive("MOVE_RIGHT"))
       game.entities.player.pos[0] += game.state.playerSpeed * dt;
   }
 
   // Handle shooting
   function handleShooting() {
     if (
-      input.isDown("SPACE") &&
+      input.isActionActive("SHOOT") &&
       Date.now() - game.state.lastFire > game.state.bulletCadence
     ) {
       const x =

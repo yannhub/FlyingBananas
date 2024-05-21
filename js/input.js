@@ -1,57 +1,43 @@
 (function () {
-  var pressedKeys = {};
+  var actions = {};
 
-  function setKey(event, status) {
-    var code = event.keyCode;
-    var key;
+  var keyToActionMap = {
+    " ": "SHOOT",
+    ArrowLeft: "MOVE_LEFT",
+    ArrowUp: "MOVE_UP",
+    ArrowRight: "MOVE_RIGHT",
+    ArrowDown: "MOVE_DOWN",
+    w: "MOVE_UP",
+    a: "MOVE_LEFT",
+    s: "MOVE_DOWN",
+    d: "MOVE_RIGHT",
+  };
 
-    switch (code) {
-      case 32:
-        key = "SPACE";
-        break;
-      case 37:
-        key = "LEFT";
-        break;
-      case 38:
-        key = "UP";
-        break;
-      case 39:
-        key = "RIGHT";
-        break;
-      case 40:
-        key = "DOWN";
-        break;
-      default:
-        key = String.fromCharCode(code);
+  function setAction(event, status) {
+    var action = keyToActionMap[event.key];
+    if (action) {
+      actions[action] = status;
     }
-
-    pressedKeys[key] = status;
   }
 
   document.addEventListener("keydown", function (e) {
-    setKey(e, true);
+    setAction(e, true);
   });
 
   document.addEventListener("keyup", function (e) {
-    setKey(e, false);
+    setAction(e, false);
   });
 
   document.addEventListener("blur", function () {
-    pressedKeys = {};
+    actions = {};
   });
 
   window.input = {
-    isDown: function (key) {
-      return pressedKeys[key.toUpperCase()];
+    isActionActive: function (action) {
+      return actions[action];
     },
-    setKeyFromJoystick: function (joystick) {
-      pressedKeys.UP = joystick.up;
-      pressedKeys.DOWN = joystick.down;
-      pressedKeys.LEFT = joystick.left;
-      pressedKeys.RIGHT = joystick.right;
-    },
-    setSpaceKey: function (pressed) {
-      pressedKeys.SPACE = pressed;
+    setShoot: function (active) {
+      actions.SHOOT = active;
     },
   };
 })();
