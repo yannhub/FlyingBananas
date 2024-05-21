@@ -1,7 +1,7 @@
 // author: Willie Lawrence
 // contact: cptx032 arroba gmail dot com
 // based in https://github.com/jeromeetienne/virtualjoystick.js/blob/master/virtualjoystick.js
-var JOYSTICK_DIV = null;
+let JOYSTICK_DIV = null;
 
 function __init_joystick_div() {
   const oldJoy = document.getElementById("my-joystick");
@@ -10,7 +10,7 @@ function __init_joystick_div() {
   }
   JOYSTICK_DIV = document.createElement("div");
   JOYSTICK_DIV.id = "my-joystick";
-  var div_style = JOYSTICK_DIV.style;
+  let div_style = JOYSTICK_DIV.style;
   div_style.background = "rgba(255,255,255,0)";
   div_style.position = "absolute";
   div_style.top = "0px";
@@ -25,7 +25,7 @@ function __init_joystick_div() {
   div_style.zIndex = "1";
   document.body.appendChild(JOYSTICK_DIV);
 }
-var JoyStick = function (attrs) {
+let JoyStick = function (attrs) {
   this.radius = attrs.radius || 50;
   this.inner_radius = attrs.inner_radius || this.radius / 2;
   this.x = attrs.x || 0;
@@ -74,12 +74,12 @@ JoyStick.prototype.__create_fullscreen_div = function () {
   div_style.borderStyle = "solid";
   this.div.appendChild(this.control);
   ///////////////////////////////////////////
-  var self = this;
+  let self = this;
   // the event is binded in all the screen
   // to captures fast movements
   function touch_hander(evt) {
     evt.preventDefault();
-    var touch_obj;
+    let touch_obj;
 
     // If multiple touches, take only touch from the left side
     if (evt.changedTouches) {
@@ -122,7 +122,7 @@ attributes:
 	+ y
 	+ func
 */
-var JoyStickButton = function (attrs) {
+let JoyStickButton = function (attrs) {
   this.radius = attrs.radius || 50;
   this.x = attrs.x || 0;
   this.y = attrs.y || 0;
@@ -147,7 +147,7 @@ var JoyStickButton = function (attrs) {
     this.bind("touchstart", attrs.func);
   }
 
-  var self = this;
+  let self = this;
   function __over() {
     div_style.backgroundColor = "rgba(255,255,255,0.3)";
   }

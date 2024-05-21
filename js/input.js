@@ -1,7 +1,7 @@
 (function () {
-  var actions = {};
+  let actions = {};
 
-  var keyToActionMap = {
+  let keyToActionMap = {
     " ": "SHOOT",
     ArrowLeft: "MOVE_LEFT",
     ArrowUp: "MOVE_UP",
@@ -14,7 +14,7 @@
   };
 
   function setAction(event, status) {
-    var action = keyToActionMap[event.key];
+    let action = keyToActionMap[event.key];
     if (action) {
       actions[action] = status;
     }
