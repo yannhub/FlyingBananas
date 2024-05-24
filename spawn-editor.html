@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Scripted Spawns Editor</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+      }
+      #controls {
+        margin-bottom: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="controls">
+      <label for="canvasWidthInput">Canvas Width: </label>
+      <input type="number" id="canvasWidthInput" />
+      <button id="exportButton">Export as JSON</button>
+      <input type="file" id="importButton" accept=".json" />
+      <label for="eraseModeCheckbox">Erase Mode: </label>
+      <input type="checkbox" id="eraseModeCheckbox" />
+    </div>
+
+    <div id="drawZone">
+      <canvas id="canvas" width="500" height="500"></canvas>
+    </div>
+
+    <script>
+      const drawZone = document.getElementById("drawZone");
+      const canvasWidthInput = document.getElementById("canvasWidthInput");
+      const exportButton = document.getElementById("exportButton");
+      const importButton = document.getElementById("importButton");
+      const eraseModeCheckbox = document.getElementById("eraseModeCheckbox");
+
+      const canvas = document.getElementById("canvas");
+      const ctx = canvas.getContext("2d");
+
+      const Y_TILES = 100;
+      const drawZoneHeight = 500; // Adjustable height
+      const TILE_SIZE = drawZoneHeight / Y_TILES;
+
+      const pageWidth = window.innerWidth;
+      canvas.width = pageWidth;
+      canvas.height = drawZoneHeight;
+      canvasWidthInput.value = pageWidth;
+
+      const maxXTiles = Math.floor(pageWidth / TILE_SIZE);
+      xTiles = maxXTiles;
+
+      let scriptedSpawns = [];
+
+      function createGrid() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.strokeStyle = "#ccc";
+        ctx.lineWidth = 1;
+
+        // Calculate the number of xTiles based on the updated width
+        xTiles = Math.floor(canvas.width / TILE_SIZE);
+
+        // Draw vertical lines
+        for (let x = 0; x <= xTiles; x++) {
+          ctx.beginPath();
+          ctx.moveTo(x * TILE_SIZE, 0);
+          ctx.lineTo(x * TILE_SIZE, canvas.height);
+          ctx.stroke();
+        }
+
+        // Draw horizontal lines
+        for (let y = 0; y <= Y_TILES; y++) {
+          ctx.beginPath();
+          ctx.moveTo(0, y * TILE_SIZE);
+          ctx.lineTo(canvas.width, y * TILE_SIZE);
+          ctx.stroke();
+        }
+
+        // Redraw the scripted spawns
+        scriptedSpawns.forEach((spawn) => {
+          const x = spawn.time;
+          const y = (spawn.y / 100) * Y_TILES;
+          ctx.fillStyle = "red";
+          ctx.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+        });
+      }
+
+      drawZone.addEventListener("mousemove", handleTileHover);
+
+      function handleTileHover(event) {
+        if (event.buttons !== 1) return; // Only proceed if left mouse button is pressed
+
+        const x = Math.floor(event.offsetX / TILE_SIZE);
+        const y = Math.floor(event.offsetY / TILE_SIZE);
+
+        const existingSpawnIndex = scriptedSpawns.findIndex(
+          (spawn) =>
+            spawn.time === x && spawn.y === Math.round((y / 100) * Y_TILES)
+        );
+
+        if (eraseModeCheckbox.checked) {
+          // Erase mode: remove existing spawn
+          if (existingSpawnIndex !== -1) {
+            scriptedSpawns.splice(existingSpawnIndex, 1);
+          }
+        } else {
+          // Create mode: create a new spawn
+          if (existingSpawnIndex === -1) {
+            scriptedSpawns.push({
+              time: x,
+              y: Math.round((y / 100) * Y_TILES),
+            });
+          }
+        }
+
+        createGrid(); // Redraw the grid with updated spawns
+      }
+
+      function exportJSON() {
+        scriptedSpawns.sort((a, b) => a.time - b.time);
+        const json = JSON.stringify(scriptedSpawns, null, 2);
+        const blob = new Blob([json], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "scriptedSpawns.json";
+        link.click();
+        URL.revokeObjectURL(url);
+      }
+
+      function importJSON(file) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          try {
+            scriptedSpawns = JSON.parse(event.target.result);
+            // Calculate the maximum time value from the imported spawns
+            const maxTime = Math.max(
+              ...scriptedSpawns.map((spawn) => spawn.time)
+            );
+            // Set the canvas width based on the maximum time
+            canvas.width = (maxTime + 1) * TILE_SIZE;
+            canvasWidthInput.value = canvas.width;
+            createGrid(); // Redraw the grid with imported spawns
+          } catch (error) {
+            console.error("Error parsing JSON file:", error);
+          }
+        };
+        reader.readAsText(file);
+      }
+
+      canvasWidthInput.addEventListener("change", () => {
+        const newWidth = parseInt(canvasWidthInput.value);
+        canvas.width = newWidth;
+        createGrid();
+      });
+
+      exportButton.addEventListener("click", exportJSON);
+
+      importButton.addEventListener("change", (event) => {
+        const file = event.target.files[0];
+        if (file) {
+          importJSON(file);
+        }
+      });
+
+      createGrid();
+    </script>
+  </body>
+</html>
