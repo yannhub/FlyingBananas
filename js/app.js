@@ -1,4 +1,8 @@
-window.addEventListener("load", () => {
+window.addEventListener("load", async () => {
+  const levels = {
+    1: await fetch(`./levels/level_1.json`).then((response) => response.json()),
+  };
+
   function getInitialState() {
     return {
       idle: false,
@@ -9,6 +13,7 @@ window.addEventListener("load", () => {
       bulletSpeed: 500,
       enemySpeed: 100,
       bulletCadence: 180,
+      level: 1,
       score: 0,
       oldScore: -1,
     };
@@ -45,6 +50,8 @@ window.addEventListener("load", () => {
     /BlackBerry/i,
     /Windows Phone/i,
   ].some((toMatchItem) => navigator.userAgent.match(toMatchItem));
+
+  console.log(isMobileDevice);
 
   // DOM elements
   const domElements = {
@@ -176,13 +183,14 @@ window.addEventListener("load", () => {
     game.state.gameTime += dt;
     handleInput(dt);
     updateEntities(dt);
-    generateBonus();
+    generateRandomBonus();
     generateEnemies();
+    // generateRandomEnemies();
     checkCollisions();
     domElements.scoreEl.innerHTML = game.state.score;
   }
 
-  function generateBonus() {
+  function generateRandomBonus() {
     if (
       game.state.oldScore !== game.state.score &&
       game.state.score !== 0 &&
@@ -197,7 +205,7 @@ window.addEventListener("load", () => {
     }
   }
 
-  function generateEnemies() {
+  function generateRandomEnemies() {
     if (Math.random() < 1 - Math.pow(0.993, game.state.gameTime)) {
       game.entities.enemies.push({
         pos: [game.canvas.width, Math.random() * (game.canvas.height - 39)],
@@ -210,6 +218,36 @@ window.addEventListener("load", () => {
         ),
       });
     }
+  }
+
+  // Function that generate enemies for current level
+  // This function use datas from level/level_[LEVEL_NUMBER].json
+  function generateEnemies() {
+    const scriptedSpawns = levels[game.state.level];
+    const spawnInterval = 0.5;
+
+    // Iterate through the scripted spawns and generate enemies accordingly
+    scriptedSpawns.some((spawn) => {
+      const spawnTime = spawn.time * spawnInterval;
+      const shouldSpawn = spawnTime <= game.state.gameTime;
+      if (!shouldSpawn) {
+        return true;
+      }
+      const yPosition = spawn.y * ((game.canvas.height - 39) / 100);
+
+      game.entities.enemies.push({
+        pos: [game.canvas.width, yPosition],
+        sprite: new Sprite(
+          "img/sprites1.png",
+          [0, 65],
+          [85, 50],
+          6,
+          [0, 1, 2, 1, 0]
+        ),
+      });
+      // remove spawn from level
+      scriptedSpawns.splice(scriptedSpawns.indexOf(spawn), 1);
+    });
   }
 
   // Handle input

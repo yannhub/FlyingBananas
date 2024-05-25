@@ -37,7 +37,7 @@
       const canvas = document.getElementById("canvas");
       const ctx = canvas.getContext("2d");
 
-      const Y_TILES = 100;
+      const Y_TILES = 10;
       const drawZoneHeight = 500; // Adjustable height
       const TILE_SIZE = drawZoneHeight / Y_TILES;
 
@@ -78,13 +78,14 @@
         // Redraw the scripted spawns
         scriptedSpawns.forEach((spawn) => {
           const x = spawn.time;
-          const y = (spawn.y / 100) * Y_TILES;
+          const y = Math.floor((spawn.y / 100) * Y_TILES);
           ctx.fillStyle = "red";
           ctx.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
         });
       }
 
       drawZone.addEventListener("mousemove", handleTileHover);
+      drawZone.addEventListener("mousedown", handleTileHover);
 
       function handleTileHover(event) {
         if (event.buttons !== 1) return; // Only proceed if left mouse button is pressed
@@ -94,7 +95,7 @@
 
         const existingSpawnIndex = scriptedSpawns.findIndex(
           (spawn) =>
-            spawn.time === x && spawn.y === Math.round((y / 100) * Y_TILES)
+            spawn.time === x && spawn.y === Math.floor((y / Y_TILES) * 100)
         );
 
         if (eraseModeCheckbox.checked) {
@@ -107,7 +108,7 @@
           if (existingSpawnIndex === -1) {
             scriptedSpawns.push({
               time: x,
-              y: Math.round((y / 100) * Y_TILES),
+              y: Math.floor((y / Y_TILES) * 100),
             });
           }
         }
